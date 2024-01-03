@@ -1,10 +1,14 @@
 {
   "name": "etch-a-sketch-v2",
   "version": "1.0.0",
-  "description": "",
-  "main": "tailwind.config.js",
+  "description": "etch-a-sketch website",
+  "main": "public/script.js",
   "scripts": {
     "build": "tailwindcss -i ./src/input.css -o ./public/style.css --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Epoza/etch-a-sketch-v2.git"
   },
   "keywords": [],
   "author": "",

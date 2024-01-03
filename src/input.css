@@ -1,3 +1,12 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+button {
+    @apply transition-colors ease-out duration-500
+}
+
+button:hover {
+    @apply transition-colors ease-in duration-400 text-xl p-1 bg-black text-white
+}
+

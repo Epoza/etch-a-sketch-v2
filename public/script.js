@@ -2,23 +2,23 @@
 let containerEl = document.querySelector(".div_container");
 let eraserButton = document.getElementById("eraseButton");
 let dimensionsButton = document.getElementById("dimensionsButton");
-let divRowsCols = 4;
+// base values for when website first loads
+let baseColRows = 4;
 // calculates the dimensions of the box and divs inside
-let divDimensions = (100 / divRowsCols) * 5;
-// function that calculates grid col and rows
-function createRowsCols() {
-    containerEl.style.gridTemplateColumns = `repeat(${divRowsCols}, auto)`; // change 4 to whatever divrowscols
-    containerEl.style.gridTemplateRows = `repeat(${divRowsCols}, ${divDimensions}px)`; // change px to match height and width using divrowscols * 6
-    containerEl.style.gap = "2px"; // delete later
-}
-// creates specified amount of divs
-function createDivs(divRowsCols) {
-    let totalDivs = divRowsCols * divRowsCols; // gets total divs ex: 16 = 4 * 4
+let baseDimensions = (100 / baseColRows) * 5;
+// function that calculates the grid dimensions and div styling
+function createDivs(newColRows, newDimensions) {
+    // makes a newColRows x newColRows grid ex: 4x4 grid
+    containerEl.style.gridTemplateColumns = `repeat(${newColRows}, auto)`;
+    containerEl.style.gridTemplateRows = `repeat(${newColRows}, ${newDimensions}px)`;
+    // creates specified amount of divs
+    let totalDivs = newColRows * newColRows;
+    // make and style each div
     for (let i = 0; i < totalDivs; i++) {
         let newDiv = document.createElement("div");
         newDiv.style.background = "white";
-        newDiv.style.height = `${divDimensions}px`; // multiply divrowscols * 6
-        newDiv.style.width = `${divDimensions}px`; // multiply divrowscols * 6
+        newDiv.style.height = `${newDimensions}px`;
+        newDiv.style.width = `${newDimensions}px`;
         // changes background color when hovered
         newDiv.addEventListener("mouseover", (e) => {
             const targetElement = e.target;
@@ -26,16 +26,14 @@ function createDivs(divRowsCols) {
                 targetElement.style.backgroundColor = "black";
             }
             else {
-                console.log("yess it is trueee...");
+                // eraser button is clicked
                 targetElement.style.backgroundColor = "white";
             }
-            // if eraserclicked is true
         });
         containerEl.appendChild(newDiv);
     }
 }
-createRowsCols();
-createDivs(divRowsCols);
+createDivs(baseColRows, baseDimensions);
 // add listener for buttons
 let eraserClicked = false;
 eraserButton.addEventListener('click', (e) => {
@@ -56,20 +54,32 @@ eraserButton.addEventListener('click', (e) => {
             eraserButton.style.padding = "";
         }
     }
+    else {
+        alert("Error!");
+    }
 });
 // promps user for new dimensions
 dimensionsButton.addEventListener('click', (e) => {
     if (e.target) {
         console.log("dimensions");
         let userInput = parseInt(prompt("Enter amount rows x columns", "4"));
+        let divColRows;
         // checks that userInput is a whole number from 1-99
         if (userInput >= 1 && userInput <= 99) {
-            divRowsCols = userInput;
-            console.log(divRowsCols);
+            divColRows = userInput;
+            console.log(divColRows);
         }
         else {
             alert("Error: please enter a number from 1 to 99");
-            divRowsCols = 4;
+            divColRows = 4;
         }
+        let dimensions = (100 / divColRows) * 5;
+        // clear existing divs
+        containerEl.innerHTML = '';
+        // create the new etch a sketch board
+        createDivs(divColRows, dimensions);
+    }
+    else {
+        alert("Error!");
     }
 });

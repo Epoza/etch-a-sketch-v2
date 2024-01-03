@@ -7,6 +7,6 @@ button {
 }
 
 button:hover {
-    @apply transition-colors ease-in duration-400 text-xl p-1 bg-black text-white
+    @apply transition-colors ease-in duration-500 text-xl p-1 bg-black text-white
 }
 

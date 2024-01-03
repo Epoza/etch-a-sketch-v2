@@ -26,38 +26,42 @@ function createDivs(newColRows: number, newDimensions: number) {
         newDiv.style.background = "white";
         newDiv.style.height = `${newDimensions}px`;
         newDiv.style.width = `${newDimensions}px`;
-        // changes background color when hovered
+        // checks for mouseover div event
         newDiv.addEventListener("mouseover", (e: MouseEvent) => {
             const targetElement = e.target as HTMLElement;
             if (e.target) {
-                switch (true) {
-                    case buttonStates.eraserClicked:
-                        targetElement.style.backgroundColor = "white";
-                        // reset the shading level to 0
-                        targetElement.setAttribute("data-shading-level", "0");
-                        break;
-                    case buttonStates.shadingClicked:
-                        // get the current shading level or default to 0
-                        const currentShadingLevel = parseFloat(targetElement.getAttribute("data-shading-level")!) || 0;
-                        // increase shading level by 10%, up to a maximum of 1
-                        const newShadingLevel = Math.min(currentShadingLevel + 0.1, 1);
-                        // apply the new shading level
-                        targetElement.style.backgroundColor = `rgba(0, 0, 0, ${newShadingLevel})`;
-                        // update the shading level
-                        targetElement.setAttribute("data-shading-level", newShadingLevel.toString());
-                        break;
-                    default:
-                        targetElement.style.backgroundColor = "black";
-                        // reset the shading level to 0
-                        targetElement.setAttribute("data-shading-level", "0");
-                }
+                divColor(targetElement)
             }
         });
         containerEl.appendChild(newDiv);
     }
 }
 
-createDivs(baseColRows, baseDimensions);
+// change div color depending on button clicked
+function divColor (targetElement: HTMLElement) {
+    switch (true) {
+        case buttonStates.eraserClicked:
+            targetElement.style.backgroundColor = "white";
+            // reset the shading level to 0
+            targetElement.setAttribute("data-shading-level", "0");
+            break;
+        case buttonStates.shadingClicked:
+            // get the current shading level or default to 0
+            const currentShadingLevel = parseFloat(targetElement.getAttribute("data-shading-level")!) || 0;
+            // increase shading level by 10%, up to a maximum of 1
+            const newShadingLevel = Math.min(currentShadingLevel + 0.1, 1);
+            // apply the new shading level
+            targetElement.style.backgroundColor = `rgba(0, 0, 0, ${newShadingLevel})`;
+            // update the shading level
+            targetElement.setAttribute("data-shading-level", newShadingLevel.toString());
+            break;
+        default:
+            targetElement.style.backgroundColor = "black";
+            // reset the shading level to 0
+            targetElement.setAttribute("data-shading-level", "0");
+    }
+}
+
 // add listener for coloring buttons
 toggleButtonState.forEach(button => {
     button.addEventListener('click', (e) => {
@@ -84,7 +88,6 @@ toggleButtonState.forEach(button => {
         // toggle the associated variable
         if (buttonVariable && buttonStates.hasOwnProperty(buttonVariable)) {
             buttonStates[buttonVariable] = !buttonStates[buttonVariable];
-            console.log(`Button ${buttonVariable} clicked. State: ${buttonStates[buttonVariable]}`);
             // button styling when clicked
             if (button instanceof HTMLElement) {
                 button.style.color = buttonStates[buttonVariable] ? "white" : '';
@@ -99,13 +102,11 @@ toggleButtonState.forEach(button => {
 // promps user for new dimensions
 dimensionsButton.addEventListener('click', (e) => {
     if(e.target){
-        console.log("dimensions");
         let userInput = parseInt(prompt("Enter amount rows x columns", "4")!);
         let divColRows: number;
         // checks that userInput is a whole number from 1-99
         if(userInput >= 1 && userInput <= 99){
             divColRows = userInput;
-            console.log(divColRows);
         } else {
             alert("Error: please enter a number from 1 to 99")
             divColRows = 4;
@@ -119,3 +120,5 @@ dimensionsButton.addEventListener('click', (e) => {
         alert("Error!");
     }
 });
+// creates base 
+createDivs(baseColRows, baseDimensions);

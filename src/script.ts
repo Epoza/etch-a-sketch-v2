@@ -102,7 +102,7 @@ toggleButtonState.forEach(button => {
 // promps user for new dimensions
 dimensionsButton.addEventListener('click', (e) => {
     if(e.target){
-        let userInput = parseInt(prompt("Enter amount rows x columns", "4")!);
+        let userInput = parseInt(prompt("Enter the amount rows and columns (ex: 4, for a 4x4 grid", "4")!);
         let divColRows: number;
         // checks that userInput is a whole number from 1-99
         if(userInput >= 1 && userInput <= 99){

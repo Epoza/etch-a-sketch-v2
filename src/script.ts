@@ -1,6 +1,12 @@
+let buttonStates: { [key: string]: boolean } = {
+    shadingClicked: false,
+    eraserClicked: false,
+};
+
 let containerEl = document.querySelector(".div_container") as HTMLElement;
 let eraserButton = document.getElementById("eraseButton") as HTMLElement;
 let dimensionsButton = document.getElementById("dimensionsButton") as HTMLElement;
+let toggleButtonState = document.querySelectorAll(".toggle_button_state")
 
 // base values for when website first loads
 let baseColRows: number = 4;
@@ -23,11 +29,28 @@ function createDivs(newColRows: number, newDimensions: number) {
         // changes background color when hovered
         newDiv.addEventListener("mouseover", (e: MouseEvent) => {
             const targetElement = e.target as HTMLElement;
-            if (e.target && eraserClicked === false) {
-                targetElement.style.backgroundColor = "black";
-            } else {
-                // eraser button is clicked
-                targetElement.style.backgroundColor = "white"
+            if (e.target) {
+                switch (true) {
+                    case buttonStates.eraserClicked:
+                        targetElement.style.backgroundColor = "white";
+                        // reset the shading level to 0
+                        targetElement.setAttribute("data-shading-level", "0");
+                        break;
+                    case buttonStates.shadingClicked:
+                        // get the current shading level or default to 0
+                        const currentShadingLevel = parseFloat(targetElement.getAttribute("data-shading-level")!) || 0;
+                        // increase shading level by 10%, up to a maximum of 1
+                        const newShadingLevel = Math.min(currentShadingLevel + 0.1, 1);
+                        // apply the new shading level
+                        targetElement.style.backgroundColor = `rgba(0, 0, 0, ${newShadingLevel})`;
+                        // update the shading level
+                        targetElement.setAttribute("data-shading-level", newShadingLevel.toString());
+                        break;
+                    default:
+                        targetElement.style.backgroundColor = "black";
+                        // reset the shading level to 0
+                        targetElement.setAttribute("data-shading-level", "0");
+                }
             }
         });
         containerEl.appendChild(newDiv);
@@ -35,28 +58,42 @@ function createDivs(newColRows: number, newDimensions: number) {
 }
 
 createDivs(baseColRows, baseDimensions);
+// add listener for coloring buttons
+toggleButtonState.forEach(button => {
+    button.addEventListener('click', (e) => {
+        // get the data-variable attribute value
+        const buttonVariable = button.getAttribute('data-variable');
 
-// add listener for buttons
-let eraserClicked = false;
-eraserButton.addEventListener('click', (e) => {
-    if (e.target) {
-        eraserClicked = !eraserClicked; // Toggle the state
-        if (eraserClicked) {
-            // change styles when the button is clicked
-            eraserButton.style.color = "white";
-            eraserButton.style.backgroundColor = "black";
-            eraserButton.style.fontSize = "1.25rem";
-            eraserButton.style.padding = "0.25rem";
-        } else {
-            // reset styles when the button is not clicked
-            eraserButton.style.color = ""; 
-            eraserButton.style.backgroundColor = "";
-            eraserButton.style.fontSize = "";
-            eraserButton.style.padding = "";
+        // set all other states to false and reset styles
+        toggleButtonState.forEach(otherButton => {
+            const otherButtonVariable = otherButton.getAttribute('data-variable');
+
+            if (otherButtonVariable && otherButtonVariable !== buttonVariable) {
+                buttonStates[otherButtonVariable] = false;
+
+                if (otherButton instanceof HTMLElement) {
+                    otherButton.style.backgroundColor = "";
+                    otherButton.style.color = "";
+                    otherButton.style.fontSize = "";
+                    otherButton.style.padding = "";
+                }
+            }
+        });
+        
+
+        // toggle the associated variable
+        if (buttonVariable && buttonStates.hasOwnProperty(buttonVariable)) {
+            buttonStates[buttonVariable] = !buttonStates[buttonVariable];
+            console.log(`Button ${buttonVariable} clicked. State: ${buttonStates[buttonVariable]}`);
+            // button styling when clicked
+            if (button instanceof HTMLElement) {
+                button.style.color = buttonStates[buttonVariable] ? "white" : '';
+                button.style.backgroundColor = buttonStates[buttonVariable] ? "black" : '';
+                button.style.fontSize = buttonStates[buttonVariable] ? "1.25rem" : '';
+                button.style.padding = buttonStates[buttonVariable] ? "0.25rem" : '';
+            }
         }
-    } else {
-        alert("Error!")
-    }
+    });
 });
 
 // promps user for new dimensions

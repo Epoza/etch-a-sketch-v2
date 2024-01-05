@@ -10,7 +10,22 @@ let toggleButtonState = document.querySelectorAll(".toggle_button_state");
 // base values for when website first loads
 let baseColRows = 4;
 // calculates the dimensions of the box and divs inside
-let baseDimensions = (100 / baseColRows) * 5;
+let baseDimensions = calculateDimensions(baseColRows);
+// Adjust the base dimensions based on the screen width
+function calculateDimensions(colRows) {
+    const screenWidth = window.innerWidth;
+    const screenHeight = window.innerHeight;
+    if (screenWidth < 470 || screenHeight < 580) {
+        return (100 / colRows) * 3;
+    }
+    else if (screenWidth < 640 || screenHeight < 640) {
+        return (100 / colRows) * 4;
+    }
+    else if (screenWidth < 768 || screenHeight < 768) {
+        return (100 / colRows) * 4.5;
+    }
+    return (100 / colRows) * 5;
+}
 // function that calculates the grid dimensions and div styling
 function createDivs(newColRows, newDimensions) {
     // makes a newColRows x newColRows grid ex: 4x4 grid
@@ -102,7 +117,7 @@ dimensionsButton.addEventListener('click', (e) => {
             alert("Error: please enter a number from 1 to 99");
             divColRows = 4;
         }
-        let dimensions = (100 / divColRows) * 5;
+        let dimensions = calculateDimensions(divColRows);
         // clear existing divs
         containerEl.innerHTML = '';
         // create the new etch a sketch board

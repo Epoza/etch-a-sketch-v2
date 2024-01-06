@@ -2,7 +2,11 @@
 module.exports = {
   content: ["./public/*.html"],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        'Sans': ['Fira Sans', 'Noto Sans', 'PT Serif'],
+      },
+    },
   },
   plugins: [],
 }

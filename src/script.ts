@@ -12,17 +12,17 @@ let toggleButtonState = document.querySelectorAll(".toggle_button_state")
 let divColRows: number = 4;
 let dimensions: number = calculateDimensions(divColRows);
 
-// Adjust the base dimensions based on the screen width or height
+// Adjust the dimensions based on the screen width or height
 function calculateDimensions(colRows: number): number {
     const screenWidth = window.innerWidth;
     const screenHeight = window.innerHeight;
     
-    if(screenWidth < 470 || screenHeight < 580){
+    if(screenWidth < 470 || screenHeight < 635){
         // calculates the dimensions of the box and divs inside
         return (100 / colRows) * 3;
-    }else if(screenWidth < 640 || screenHeight < 640){
+    }else if(screenWidth < 640 || screenHeight < 680){
         return (100 / colRows) * 4;
-    } else if (screenWidth < 768 || screenHeight < 768){
+    } else if (screenWidth < 768 || screenHeight < 750){
             return (100 / colRows) * 4.5;
     }
     return (100 / colRows) * 5;

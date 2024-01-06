@@ -7,21 +7,21 @@ let containerEl = document.querySelector(".div_container");
 let eraserButton = document.getElementById("eraseButton");
 let dimensionsButton = document.getElementById("dimensionsButton");
 let toggleButtonState = document.querySelectorAll(".toggle_button_state");
-// base values for when website first loads
+// base values for when the website first loads
 let divColRows = 4;
-// calculates the dimensions of the box and divs inside
 let dimensions = calculateDimensions(divColRows);
-// Adjust the base dimensions based on the screen width
+// Adjust the dimensions based on the screen width or height
 function calculateDimensions(colRows) {
     const screenWidth = window.innerWidth;
     const screenHeight = window.innerHeight;
-    if (screenWidth < 470 || screenHeight < 580) {
+    if (screenWidth < 470 || screenHeight < 635) {
+        // calculates the dimensions of the box and divs inside
         return (100 / colRows) * 3;
     }
-    else if (screenWidth < 640 || screenHeight < 640) {
+    else if (screenWidth < 640 || screenHeight < 680) {
         return (100 / colRows) * 4;
     }
-    else if (screenWidth < 768 || screenHeight < 768) {
+    else if (screenWidth < 768 || screenHeight < 750) {
         return (100 / colRows) * 4.5;
     }
     return (100 / colRows) * 5;
@@ -77,11 +77,13 @@ function divColor(targetElement) {
 }
 // updates favicon based on div colors in the grid
 function updateFavicon(numCols) {
+    // creates a canvas for the favicon
     const canvas = document.createElement("canvas");
     const context = canvas.getContext("2d");
     canvas.width = 32;
     canvas.height = 32;
     const blocks = document.querySelectorAll(".div_container > div");
+    // gets the total amount of blocks for the canvas
     if (context) {
         blocks.forEach((block, index) => {
             const x = index % numCols;
@@ -90,6 +92,11 @@ function updateFavicon(numCols) {
             context.fillStyle = color;
             context.fillRect(x * (canvas.width / numCols), y * (canvas.height / numCols), canvas.width / numCols, canvas.height / numCols);
         });
+        // function to get the background color of a block
+        function getBlockColor(block) {
+            const computedStyle = window.getComputedStyle(block);
+            return computedStyle.backgroundColor || "white";
+        }
         const imageDataUrl = canvas.toDataURL("image/png");
         // Update the favicon
         const faviconLink = document.querySelector('link[rel="icon"]');
@@ -97,11 +104,6 @@ function updateFavicon(numCols) {
             faviconLink.href = imageDataUrl;
         }
     }
-}
-// function to get the background color of a block
-function getBlockColor(block) {
-    const computedStyle = window.getComputedStyle(block);
-    return computedStyle.backgroundColor || "white"; // Default to white if background color is not set
 }
 // add listener for coloring buttons
 toggleButtonState.forEach(button => {
@@ -134,7 +136,7 @@ toggleButtonState.forEach(button => {
         }
     });
 });
-// promps user for new dimensions
+// user creates new dimensions for grid
 dimensionsButton.addEventListener('click', (e) => {
     if (e.target) {
         let userInput = parseInt(prompt("Enter the amount rows and columns (ex: 4, for a 4x4 grid", "4"));
@@ -156,5 +158,5 @@ dimensionsButton.addEventListener('click', (e) => {
         alert("Error!");
     }
 });
-// creates base 
+// creates base grid dimensions when website first loads
 createDivs(divColRows, dimensions);

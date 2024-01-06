@@ -10,4 +10,3 @@ button {
 button:hover {
     @apply transition-colors ease-in duration-500 p-1 sm:text-lg lg:text-xl bg-black text-white
 }
-

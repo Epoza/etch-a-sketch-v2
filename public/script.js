@@ -8,9 +8,9 @@ let eraserButton = document.getElementById("eraseButton");
 let dimensionsButton = document.getElementById("dimensionsButton");
 let toggleButtonState = document.querySelectorAll(".toggle_button_state");
 // base values for when website first loads
-let baseColRows = 4;
+let divColRows = 4;
 // calculates the dimensions of the box and divs inside
-let baseDimensions = calculateDimensions(baseColRows);
+let dimensions = calculateDimensions(divColRows);
 // Adjust the base dimensions based on the screen width
 function calculateDimensions(colRows) {
     const screenWidth = window.innerWidth;
@@ -33,7 +33,7 @@ function createDivs(newColRows, newDimensions) {
     containerEl.style.gridTemplateRows = `repeat(${newColRows}, ${newDimensions}px)`;
     // creates specified amount of divs
     let totalDivs = newColRows * newColRows;
-    // make and style each div
+    // make and style each new div
     for (let i = 0; i < totalDivs; i++) {
         let newDiv = document.createElement("div");
         newDiv.style.background = "white";
@@ -73,7 +73,7 @@ function divColor(targetElement) {
             targetElement.setAttribute("data-shading-level", "0");
     }
     // updates favicon colors
-    updateFavicon(baseColRows);
+    updateFavicon(divColRows);
 }
 // updates favicon based on div colors in the grid
 function updateFavicon(numCols) {
@@ -132,14 +132,12 @@ toggleButtonState.forEach(button => {
                 button.style.padding = buttonStates[buttonVariable] ? "0.25rem" : '';
             }
         }
-        updateFavicon(baseColRows);
     });
 });
 // promps user for new dimensions
 dimensionsButton.addEventListener('click', (e) => {
     if (e.target) {
         let userInput = parseInt(prompt("Enter the amount rows and columns (ex: 4, for a 4x4 grid", "4"));
-        let divColRows;
         // checks that userInput is a whole number from 1-99
         if (userInput >= 1 && userInput <= 99) {
             divColRows = userInput;
@@ -148,7 +146,7 @@ dimensionsButton.addEventListener('click', (e) => {
             alert("Error: please enter a number from 1 to 99");
             divColRows = 4;
         }
-        let dimensions = calculateDimensions(divColRows);
+        dimensions = calculateDimensions(divColRows);
         // clear existing divs
         containerEl.innerHTML = '';
         // create the new etch a sketch board
@@ -159,4 +157,4 @@ dimensionsButton.addEventListener('click', (e) => {
     }
 });
 // creates base 
-createDivs(baseColRows, baseDimensions);
+createDivs(divColRows, dimensions);

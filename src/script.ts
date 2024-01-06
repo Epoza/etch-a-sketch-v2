@@ -75,6 +75,43 @@ function divColor (targetElement: HTMLElement) {
             // reset the shading level to 0
             targetElement.setAttribute("data-shading-level", "0");
     }
+    // updates favicon colors
+    updateFavicon(baseColRows);
+}
+
+// updates favicon based on div colors in the grid
+function updateFavicon(numCols: number) {
+    const canvas = document.createElement("canvas");
+    const context = canvas.getContext("2d");
+    canvas.width = 32;
+    canvas.height = 32;
+
+    const blocks = document.querySelectorAll(".div_container > div");
+
+    if (context) {
+        blocks.forEach((block, index) => {
+            const x = index % numCols;
+            const y = Math.floor(index / numCols);
+            const color = getBlockColor(block as HTMLElement);
+
+            context.fillStyle = color;
+            context.fillRect(x * (canvas.width / numCols), y * (canvas.height / numCols), canvas.width / numCols, canvas.height / numCols);
+        });
+
+        const imageDataUrl = canvas.toDataURL("image/png");
+
+        // Update the favicon
+        const faviconLink = document.querySelector('link[rel="icon"]');
+        if (faviconLink instanceof HTMLLinkElement) {
+            faviconLink.href = imageDataUrl;
+        }
+    }
+}
+
+// function to get the background color of a block
+function getBlockColor(block: HTMLElement): string {
+    const computedStyle = window.getComputedStyle(block);
+    return computedStyle.backgroundColor || "white"; // Default to white if background color is not set
 }
 
 // add listener for coloring buttons
@@ -111,6 +148,7 @@ toggleButtonState.forEach(button => {
                 button.style.padding = buttonStates[buttonVariable] ? "0.25rem" : '';
             }
         }
+    updateFavicon(baseColRows);
     });
 });
 
